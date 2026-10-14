@@ -1,0 +1,176 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="theme-color" content="#2c090b">
+<title>GameZone Arena — Esports Demo</title>
+<style>
+:root{--bg:#270809;--panel:#421516;--panel2:#602526;--text:#fff3ee;--muted:#c9a5a2;--gold:#ffbd49;--green:#53dfaa;--line:#713436}
+*{box-sizing:border-box}
+body{margin:0;background:linear-gradient(180deg,#3c1113 0,#210607 70%);color:var(--text);font-family:system-ui,-apple-system,Segoe UI,Roboto,Arial,sans-serif}
+button{font:inherit;cursor:pointer}
+.topbar{padding:17px 18px;background:#1c0607;border-bottom:1px solid #512021;display:flex;justify-content:space-between;align-items:center;gap:12px}
+.brand{font-weight:900;letter-spacing:.4px;font-size:18px}.brand span{color:var(--gold)}
+.pill{font-size:11px;color:#211004;background:var(--gold);font-weight:800;border-radius:20px;padding:6px 9px}
+.wrap{width:min(100%,980px);margin:auto;padding:18px 15px 95px}
+.profile{display:flex;gap:13px;align-items:center;padding:10px 4px 20px}
+.avatar{width:64px;height:64px;display:grid;place-items:center;border-radius:50%;font-size:30px;background:linear-gradient(135deg,#8c4646,#d18468);border:2px solid #b87561}
+.muted{color:var(--muted)}.small{font-size:12px}.id{font-size:12px;color:#fff0da;background:#63302b;border-radius:20px;padding:5px 9px;display:inline-block;margin-top:5px}
+.panel{background:linear-gradient(145deg,#713333,#512122);border:1px solid #783b3c;border-radius:18px;padding:18px;margin-bottom:16px;box-shadow:0 10px 25px #13030430}
+.balance-row{display:flex;justify-content:space-between;align-items:center;gap:12px}.balance{font-size:30px;font-weight:850;margin:5px 0 17px}.points{font-size:12px;color:#ffe0ad}
+.quick{display:grid;grid-template-columns:repeat(4,1fr);gap:8px}.quick button{background:#552021;border:1px solid #814141;color:#fff;border-radius:12px;padding:12px 5px;font-size:12px}
+.quick b{display:block;font-size:22px;margin-bottom:5px}
+.section-head{display:flex;justify-content:space-between;align-items:center;gap:8px;margin:22px 2px 12px}.section-head h2{font-size:18px;margin:0}.text-btn{background:transparent;color:var(--gold);border:0;font-size:13px}
+.filters{display:flex;gap:8px;overflow:auto;padding-bottom:10px}.filter{white-space:nowrap;background:#401516;color:#f5d8d4;border:1px solid #713536;border-radius:30px;padding:8px 13px;font-size:12px}.filter.active{background:var(--gold);color:#291407;border-color:var(--gold);font-weight:800}
+.tournaments{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px}
+.tourney{background:#431718;border:1px solid #703233;border-radius:16px;overflow:hidden}
+.banner{padding:17px 14px;background:radial-gradient(circle at 85% 20%,#914b3d,#431718 60%);min-height:96px;display:flex;align-items:flex-end;justify-content:space-between;gap:8px}
+.game-icon{font-size:31px}.status{font-size:10px;background:#1e5b40;color:#b9ffdc;padding:5px 7px;border-radius:15px;white-space:nowrap}
+.tourney-body{padding:13px}.tourney h3{font-size:15px;margin:0 0 5px}.meta{font-size:11px;color:var(--muted);line-height:1.7}
+.stats{display:flex;justify-content:space-between;gap:8px;margin:12px 0;font-size:11px}.stats strong{display:block;font-size:13px;color:white;margin-top:3px}
+.primary{width:100%;border:0;border-radius:10px;background:var(--gold);color:#291407;font-weight:850;padding:11px 8px}.primary:disabled{opacity:.65;cursor:default}
+.grid2{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.info-card{background:#401516;border:1px solid #703233;border-radius:14px;padding:15px}.info-card strong{display:block;font-size:21px;margin:7px 0}
+.list-row{display:flex;align-items:center;gap:10px;padding:12px 0;border-bottom:1px solid #633031}.list-row:last-child{border:0}.rank{width:30px;height:30px;display:grid;place-items:center;background:#65302c;border-radius:9px;font-weight:800}.grow{flex:1}.right{text-align:right}
+.nav{position:fixed;bottom:0;left:0;right:0;background:#1e0607;border-top:1px solid #542021;display:flex;justify-content:space-around;padding:8px 4px max(8px,env(safe-area-inset-bottom));z-index:10}
+.nav button{border:0;background:transparent;color:#c8a4a2;font-size:10px;padding:5px 7px;min-width:54px}.nav button span{display:block;font-size:20px;margin-bottom:3px}.nav button.active{color:var(--gold)}
+.page{display:none}.page.active{display:block}
+.notice{background:#4b3217;color:#ffe2a7;border:1px solid #8a6128;border-radius:10px;padding:11px 13px;font-size:12px;margin-bottom:14px}
+.empty{padding:24px;text-align:center;color:var(--muted)}
+footer.note{font-size:11px;color:#b98f8b;text-align:center;padding:15px}
+@media(max-width:560px){.tournaments{grid-template-columns:1fr}.wrap{padding-left:12px;padding-right:12px}.panel{padding:15px}.topbar{padding:14px}.brand{font-size:16px}}
+@media(min-width:800px){.wrap{padding-top:25px}.profile{padding-bottom:25px}.tournaments{grid-template-columns:repeat(3,minmax(0,1fr))}}
+</style>
+</head>
+<body>
+<header class="topbar">
+  <div class="brand">🎮 GAMEZONE <span>ARENA</span></div>
+  <div class="pill">FREE-PLAY DEMO</div>
+</header>
+<main class="wrap">
+  <section class="profile">
+    <div class="avatar">🎮</div>
+    <div>
+      <div style="font-weight:850;font-size:17px">ARENA PLAYER</div>
+      <div class="id">PLAYER ID · GZA10001</div>
+      <div class="muted small" style="margin-top:6px">Member · Beginner</div>
+    </div>
+  </section>
+
+  <div class="notice">Demo version: points are virtual, have no cash value, and cannot be deposited or withdrawn.</div>
+
+  <section class="page active" id="home">
+    <div class="panel">
+      <div class="balance-row"><span class="muted small">MY DEMO POINTS</span><span class="points">● Virtual points</span></div>
+      <div class="balance" id="balance">1,000 <span style="font-size:14px;color:#ffe0ad">PTS</span></div>
+      <div class="quick">
+        <button onclick="showNotice('Points are for demo use only.')"><b>🪙</b>Points</button>
+        <button onclick="navigate('tournaments')"><b>🏆</b>Tournaments</button>
+        <button onclick="navigate('activity')"><b>📋</b>My Activity</button>
+        <button onclick="navigate('account')"><b>👤</b>Account</button>
+      </div>
+    </div>
+    <div class="section-head"><h2>🔥 Featured Tournaments</h2><button class="text-btn" onclick="navigate('tournaments')">View all →</button></div>
+    <div class="tournaments" id="featured"></div>
+    <div class="section-head"><h2>📊 Top Players</h2><button class="text-btn" onclick="navigate('leaderboard')">Leaderboard →</button></div>
+    <div class="panel" id="mini-leaderboard"></div>
+  </section>
+
+  <section class="page" id="tournaments">
+    <div class="section-head"><h2>🏆 Tournaments</h2></div>
+    <div class="filters">
+      <button class="filter active" data-filter="All">All games</button>
+      <button class="filter" data-filter="Battle Royale">Battle Royale</button>
+      <button class="filter" data-filter="MOBA">MOBA</button>
+      <button class="filter" data-filter="Sports">Sports</button>
+    </div>
+    <div class="tournaments" id="all-tournaments"></div>
+  </section>
+
+  <section class="page" id="leaderboard">
+    <div class="section-head"><h2>🥇 Leaderboard</h2></div>
+    <div class="panel" id="full-leaderboard"></div>
+  </section>
+
+  <section class="page" id="activity">
+    <div class="section-head"><h2>📋 My Activity</h2></div>
+    <div class="panel" id="activity-list"></div>
+  </section>
+
+  <section class="page" id="account">
+    <div class="section-head"><h2>👤 My Account</h2></div>
+    <div class="panel">
+      <div class="list-row"><div class="avatar" style="width:45px;height:45px;font-size:22px">🎮</div><div class="grow"><strong>ARENA PLAYER</strong><div class="muted small">Player ID: GZA10001</div></div></div>
+      <div class="list-row"><div class="grow">Account type</div><strong>Demo player</strong></div>
+      <div class="list-row"><div class="grow">Points balance</div><strong id="account-points">1,000 PTS</strong></div>
+      <div class="list-row"><div class="grow">Registered tournaments</div><strong id="registered-count">0</strong></div>
+      <button class="primary" style="margin-top:15px" onclick="showNotice('This is a front-end demo. Secure sign-in can be added with a backend later.')">Sign-in setup (next step)</button>
+    </div>
+  </section>
+  <footer class="note">GameZone Arena demo · No real-money gaming, betting, payments or cash prizes.</footer>
+</main>
+
+<nav class="nav">
+  <button class="active" data-page="home"><span>⌂</span>Home</button>
+  <button data-page="tournaments"><span>🏆</span>Events</button>
+  <button data-page="leaderboard"><span>🥇</span>Rankings</button>
+  <button data-page="activity"><span>📋</span>Activity</button>
+  <button data-page="account"><span>👤</span>Account</button>
+</nav>
+<script>
+const tournaments = [
+ {id:1,name:"Battle Royale Showdown",game:"Battle Royale",icon:"🎯",date:"Sat · 6:00 PM",players:24,max:50,mode:"Squad",status:"Open"},
+ {id:2,name:"Mobile Legends Cup",game:"MOBA",icon:"⚔️",date:"Sun · 4:00 PM",players:18,max:32,mode:"5 vs 5",status:"Open"},
+ {id:3,name:"Football Pro Challenge",game:"Sports",icon:"⚽",date:"Mon · 7:00 PM",players:12,max:24,mode:"1 vs 1",status:"Open"},
+ {id:4,name:"Weekend Arena Clash",game:"Battle Royale",icon:"🔥",date:"Tue · 5:30 PM",players:42,max:50,mode:"Duo",status:"Filling fast"},
+ {id:5,name:"Strategy Masters",game:"MOBA",icon:"🛡️",date:"Wed · 6:30 PM",players:8,max:20,mode:"Team",status:"Open"},
+ {id:6,name:"Street Sports League",game:"Sports",icon:"🏅",date:"Thu · 5:00 PM",players:10,max:24,mode:"Friendly",status:"Open"}
+];
+const players=[
+ {name:"ShadowAce",pts:2850},{name:"NovaStrike",pts:2420},
+ {name:"PixelKing",pts:2100},{name:"ArenaPlayer",pts:1000},
+ {name:"RapidFox",pts:920}
+];
+let registered=[];
+let activity=[];
+let currentFilter="All";
+function showNotice(message){alert(message)}
+function card(t){
+ const joined=registered.includes(t.id);
+ const full=t.players>=t.max;
+ return `<article class="tourney"><div class="banner"><div><div class="game-icon">${t.icon}</div><div class="small muted">${t.game}</div></div><span class="status">${full?"Full":t.status}</span></div><div class="tourney-body"><h3>${t.name}</h3><div class="meta">📅 ${t.date}<br>👥 ${t.mode}</div><div class="stats"><div>Players<strong>${t.players}/${t.max}</strong></div><div class="right">Entry<strong>FREE</strong></div></div><button class="primary" ${joined||full?"disabled":""} onclick="joinTournament(${t.id})">${joined?"✓ Registered":full?"Tournament Full":"Register Free"}</button></div></article>`;
+}
+function renderTournaments(){
+ document.getElementById("featured").innerHTML=tournaments.slice(0,3).map(card).join("");
+ document.getElementById("all-tournaments").innerHTML=tournaments.filter(t=>currentFilter==="All"||t.game===currentFilter).map(card).join("");
+ document.getElementById("registered-count").textContent=registered.length;
+}
+function joinTournament(id){
+ const t=tournaments.find(x=>x.id===id);
+ if(!t||registered.includes(id)||t.players>=t.max)return;
+ registered.push(id);t.players++;
+ activity.unshift({title:"Registered: "+t.name,detail:"Free demo registration · "+t.date});
+ renderTournaments();renderActivity();showNotice("Registration successful! This is a local demo; no server data was saved.");
+}
+function renderLeaderboard(target){
+ document.getElementById(target).innerHTML=players.slice().sort((a,b)=>b.pts-a.pts).map((p,i)=>`<div class="list-row"><div class="rank">${i+1}</div><div class="grow"><strong>${p.name}</strong><div class="muted small">${i===0?"Top player":"Arena competitor"}</div></div><div class="right"><strong>${p.pts.toLocaleString()}</strong><div class="muted small">PTS</div></div></div>`).join("");
+}
+function renderActivity(){
+ document.getElementById("activity-list").innerHTML=activity.length?activity.map(a=>`<div class="list-row"><div class="rank">✓</div><div class="grow"><strong>${a.title}</strong><div class="muted small">${a.detail}</div></div></div>`).join(""):'<div class="empty">No activity yet.<br>Join a free tournament to see it here.</div>';
+}
+function navigate(page){
+ document.querySelectorAll(".page").forEach(p=>p.classList.toggle("active",p.id===page));
+ document.querySelectorAll(".nav button").forEach(b=>b.classList.toggle("active",b.dataset.page===page));
+ window.scrollTo({top:0,behavior:"smooth"});
+}
+document.querySelectorAll(".nav button").forEach(b=>b.addEventListener("click",()=>navigate(b.dataset.page)));
+document.querySelectorAll(".filter").forEach(b=>b.addEventListener("click",()=>{
+ currentFilter=b.dataset.filter;
+ document.querySelectorAll(".filter").forEach(x=>x.classList.toggle("active",x===b));
+ renderTournaments();
+}));
+renderTournaments();renderLeaderboard("mini-leaderboard");renderLeaderboard("full-leaderboard");renderActivity();
+</script>
+</body>
+</html>
